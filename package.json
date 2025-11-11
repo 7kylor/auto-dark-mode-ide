@@ -1,0 +1,76 @@
+{
+    "name": "auto-dark-mode-cursor",
+    "displayName": "Auto Dark Mode",
+    "description": "Automatically switch Cursor theme based on macOS system theme",
+    "version": "1.0.0",
+    "publisher": "taher",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/your-username/auto-dark-mode-cursor.git"
+    },
+    "keywords": [
+        "theme",
+        "dark-mode",
+        "light-mode",
+        "macos",
+        "auto",
+        "cursor",
+        "vscode"
+    ],
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "categories": [
+        "Other",
+        "Themes"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "configuration": {
+            "title": "Auto Dark Mode",
+            "properties": {
+                "autoDarkMode.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable automatic theme switching based on macOS system theme"
+                },
+                "autoDarkMode.darkTheme": {
+                    "type": "string",
+                    "default": "Cursor Dark",
+                    "description": "Theme to use when macOS is in dark mode"
+                },
+                "autoDarkMode.lightTheme": {
+                    "type": "string",
+                    "default": "Cursor Light",
+                    "description": "Theme to use when macOS is in light mode"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "autoDarkMode.toggle",
+                "title": "Toggle Auto Dark Mode"
+            },
+            {
+                "command": "autoDarkMode.detectTheme",
+                "title": "Detect and Apply macOS Theme"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "package": "vsce package",
+        "publish": "vsce publish"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@types/vscode": "^1.80.0",
+        "typescript": "^5.0.0"
+    }
+}
