@@ -4,14 +4,80 @@ import { SystemTheme } from "./macosThemeDetector";
 export class ThemeManager {
   private lastAppliedTheme: string | null = null;
 
+  private readonly vsCodeThemes: Record<SystemTheme, string[]> = {
+    dark: ["Dark 2026", "Dark Modern", "Dark+", "Cursor Dark"],
+    light: ["Light 2026", "Light Modern", "Light+", "Cursor Light"],
+  };
+
+  private readonly cursorThemes: Record<SystemTheme, string[]> = {
+    dark: ["Cursor Dark", "Dark 2026", "Dark Modern", "Dark+"],
+    light: ["Cursor Light", "Light 2026", "Light Modern", "Light+"],
+  };
+
+  /**
+   * Gets installed theme ids and labels contributed by VS Code/Cursor extensions.
+   */
+  private getInstalledThemeNames(): Set<string> {
+    const themeNames = new Set<string>();
+
+    for (const extension of vscode.extensions.all) {
+      const themes = extension.packageJSON?.contributes?.themes;
+      if (!Array.isArray(themes)) {
+        continue;
+      }
+
+      for (const theme of themes) {
+        for (const key of ["id", "label"]) {
+          const value = theme[key];
+          if (typeof value === "string" && value && !value.startsWith("%")) {
+            themeNames.add(value);
+          }
+        }
+      }
+    }
+
+    return themeNames;
+  }
+
+  private getThemeCandidates(systemTheme: SystemTheme): string[] {
+    return vscode.env.appName.toLowerCase().includes("cursor")
+      ? this.cursorThemes[systemTheme]
+      : this.vsCodeThemes[systemTheme];
+  }
+
+  private getConfiguredTheme(systemTheme: SystemTheme): string | undefined {
+    const config = vscode.workspace.getConfiguration("autoDarkMode");
+    const settingName = systemTheme === "dark" ? "darkTheme" : "lightTheme";
+    const inspected = config.inspect<string>(settingName);
+
+    return (
+      inspected?.workspaceFolderValue ??
+      inspected?.workspaceValue ??
+      inspected?.globalValue
+    );
+  }
+
+  private getAvailableThemeName(systemTheme: SystemTheme): string {
+    const installedThemeNames = this.getInstalledThemeNames();
+    const configuredTheme = this.getConfiguredTheme(systemTheme);
+    const candidates = configuredTheme
+      ? [configuredTheme, ...this.getThemeCandidates(systemTheme)]
+      : this.getThemeCandidates(systemTheme);
+
+    for (const themeName of candidates) {
+      if (installedThemeNames.has(themeName)) {
+        return themeName;
+      }
+    }
+
+    return configuredTheme ?? candidates[0];
+  }
+
   /**
    * Gets the configured theme name for the given system theme
    */
   private getThemeName(systemTheme: SystemTheme): string {
-    const config = vscode.workspace.getConfiguration("autoDarkMode");
-    return systemTheme === "dark"
-      ? config.get<string>("darkTheme", "Cursor Dark")
-      : config.get<string>("lightTheme", "Cursor Light");
+    return this.getAvailableThemeName(systemTheme);
   }
 
   /**

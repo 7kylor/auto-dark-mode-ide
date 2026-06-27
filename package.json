@@ -1,13 +1,13 @@
 {
-    "name": "auto-dark-mode-cursor",
-    "displayName": "Auto Dark Mode",
-    "description": "Automatically switch Cursor theme based on macOS system theme",
-    "version": "1.0.0",
+    "name": "auto-dark-mode-ide",
+    "displayName": "Auto Dark Mode IDE",
+    "description": "Automatically switch VS Code and Cursor themes based on macOS system theme",
+    "version": "1.0.1",
     "publisher": "taher",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/your-username/auto-dark-mode-cursor.git"
+        "url": "https://github.com/7kylor/auto-dark-mode-ide.git"
     },
     "keywords": [
         "theme",
@@ -16,7 +16,8 @@
         "macos",
         "auto",
         "cursor",
-        "vscode"
+        "vscode",
+        "ide"
     ],
     "engines": {
         "vscode": "^1.80.0"
@@ -31,7 +32,7 @@
     "main": "./out/extension.js",
     "contributes": {
         "configuration": {
-            "title": "Auto Dark Mode",
+            "title": "Auto Dark Mode IDE",
             "properties": {
                 "autoDarkMode.enabled": {
                     "type": "boolean",
@@ -40,13 +41,13 @@
                 },
                 "autoDarkMode.darkTheme": {
                     "type": "string",
-                    "default": "Cursor Dark",
-                    "description": "Theme to use when macOS is in dark mode"
+                    "default": "Dark 2026",
+                    "description": "Preferred theme to use in VS Code or Cursor when macOS is in dark mode. Falls back to an installed dark theme when unavailable."
                 },
                 "autoDarkMode.lightTheme": {
                     "type": "string",
-                    "default": "Cursor Light",
-                    "description": "Theme to use when macOS is in light mode"
+                    "default": "Light 2026",
+                    "description": "Preferred theme to use in VS Code or Cursor when macOS is in light mode. Falls back to an installed light theme when unavailable."
                 }
             }
         },
