@@ -2,9 +2,10 @@
     "name": "auto-dark-mode-ide",
     "displayName": "Auto Dark Mode IDE",
     "description": "Automatically switch VS Code and Cursor themes based on macOS system theme",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "publisher": "taher",
     "license": "MIT",
+    "packageManager": "bun@1.3.14",
     "repository": {
         "type": "git",
         "url": "https://github.com/7kylor/auto-dark-mode-ide.git"
@@ -20,7 +21,7 @@
         "ide"
     ],
     "engines": {
-        "vscode": "^1.80.0"
+        "vscode": "^1.105.0"
     },
     "categories": [
         "Other",
@@ -63,15 +64,15 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "package": "vsce package",
-        "publish": "vsce publish"
+        "package": "bun run compile && vsce package",
+        "publish": "bun run compile && vsce publish"
     },
     "devDependencies": {
-        "@types/node": "^20.0.0",
-        "@types/vscode": "^1.80.0",
-        "typescript": "^5.0.0"
+        "@types/node": "26.0.1",
+        "@types/vscode": "1.105.0",
+        "@vscode/vsce": "3.9.2",
+        "typescript": "6.0.3"
     }
 }

@@ -25,13 +25,12 @@ A lightweight VS Code and Cursor extension that automatically switches your IDE 
 ### From Source
 
 1. Clone this repository
-2. Run `npm install` to install dependencies
-3. Run `npm run compile` to build the extension
+2. Run `bun install` to install dependencies
+3. Run `bun run compile` to build the extension
 4. Press `F5` in VS Code or Cursor to open a new window with the extension loaded
 5. Or package the extension:
    ```bash
-   npm install -g @vscode/vsce
-   vsce package
+   bun run package
    ```
 
 ## Usage
@@ -85,37 +84,37 @@ To publish the extension to the VS Code Marketplace:
 1. Install the VS Code Extension Manager:
 
    ```bash
-   npm install -g @vscode/vsce
+   bun install
    ```
 
 2. Login to the marketplace:
 
    ```bash
-   vsce login <publisher-name>
+   bunx vsce login <publisher-name>
    ```
 
 3. Package the extension:
 
    ```bash
-   vsce package
+   bun run package
    ```
 
 4. Publish the extension:
    ```bash
-   vsce publish
+   bun run publish
    ```
 
 ## Development
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Compile TypeScript
-npm run compile
+bun run compile
 
 # Watch for changes
-npm run watch
+bun run watch
 ```
 
 ## License

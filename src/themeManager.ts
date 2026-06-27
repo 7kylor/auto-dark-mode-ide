@@ -3,6 +3,8 @@ import { SystemTheme } from "./macosThemeDetector";
 
 export class ThemeManager {
   private lastAppliedTheme: string | null = null;
+  private installedThemeNames: Set<string> | null = null;
+  private readonly isCursor = vscode.env.appName.toLowerCase().includes("cursor");
 
   private readonly vsCodeThemes: Record<SystemTheme, string[]> = {
     dark: ["Dark 2026", "Dark Modern", "Dark+", "Cursor Dark"],
@@ -18,6 +20,10 @@ export class ThemeManager {
    * Gets installed theme ids and labels contributed by VS Code/Cursor extensions.
    */
   private getInstalledThemeNames(): Set<string> {
+    if (this.installedThemeNames) {
+      return this.installedThemeNames;
+    }
+
     const themeNames = new Set<string>();
 
     for (const extension of vscode.extensions.all) {
@@ -36,11 +42,12 @@ export class ThemeManager {
       }
     }
 
+    this.installedThemeNames = themeNames;
     return themeNames;
   }
 
   private getThemeCandidates(systemTheme: SystemTheme): string[] {
-    return vscode.env.appName.toLowerCase().includes("cursor")
+    return this.isCursor
       ? this.cursorThemes[systemTheme]
       : this.vsCodeThemes[systemTheme];
   }
@@ -87,7 +94,12 @@ export class ThemeManager {
     const themeName = this.getThemeName(systemTheme);
 
     // Avoid redundant updates
-    if (this.lastAppliedTheme === themeName) {
+    const currentTheme = vscode.workspace
+      .getConfiguration()
+      .get<string>("workbench.colorTheme");
+
+    if (this.lastAppliedTheme === themeName || currentTheme === themeName) {
+      this.lastAppliedTheme = themeName;
       return false;
     }
 
@@ -123,5 +135,6 @@ export class ThemeManager {
    */
   resetCache(): void {
     this.lastAppliedTheme = null;
+    this.installedThemeNames = null;
   }
 }
